@@ -1,0 +1,262 @@
+import java.util.Scanner;
+
+
+public class Milestone1 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner (System.in);
+		System.out.println("Welcome to the FracCalc Program. Please enter equations and type \"quit\" to end the program.");
+		System.out.print("> ");
+
+		String fraction1 = sc.next();
+		while(!fraction1.equals("quit")){
+			String operator = sc.next();
+			String fraction2 = sc.next();
+
+
+			System.out.println("fraction 1: " + fraction1);
+			System.out.println("Operator: " + operator);
+			System.out.println("fraction 2: " + fraction2);
+			System.out.println("Operator: " + operator);
+			
+
+
+
+			int wholeNumber1= getWholeNumber(fraction1);
+			System.out.println("The whole Number of fraction 1 is: " + wholeNumber1);
+
+
+			int wholeNumber2= getWholeNumber(fraction2);
+			System.out.println("The whole Number of fraction 2 is: " + wholeNumber2);
+
+			int numerator1= getNumerator(fraction1);
+			System.out.println("The numerator of fraction 1 is: " + numerator1);
+
+			int numerator2= getNumerator(fraction2);
+			System.out.println("The numerator of fraction 2 is: " + numerator2);
+
+			int denominator1= getDenominator(fraction1);
+			System.out.println("The denominator of fraction 1 is: " + denominator1);
+
+			int denominator2= getDenominator(fraction2);
+			System.out.println("The denominator of fraction 2 is: " + denominator2);
+
+			int improperNumerator1 = getImproperNumerator (wholeNumber1, numerator1, denominator1);
+			System.out.println("The improper numerator of fraction 1 is: " + improperNumerator1);
+
+			int improperNumerator2 = getImproperNumerator (wholeNumber2, numerator2, denominator2);
+			System.out.println("The improper numerator of fraction 2 is: " + improperNumerator2);
+
+			
+			multiply(  improperNumerator1, improperNumerator2,  denominator1, denominator2);
+			divide (  improperNumerator1, improperNumerator2,  denominator1, denominator2);
+
+
+
+			int lcm = getLeastCommonMultiple ( denominator1, denominator2);
+
+			add( lcm, denominator1, denominator2, improperNumerator1, improperNumerator2, fraction1, fraction2);
+
+			subtract (lcm, denominator1, denominator2,  improperNumerator1, improperNumerator2,fraction1, fraction2);
+
+		 
+			
+
+
+
+
+
+			System.out.println("> ");
+			fraction1 = sc.next();
+
+
+
+
+
+		}
+
+		System.out.println("This is the end of the program.");
+
+
+
+
+
+	}
+	public static int getWholeNumber (String number){
+		int underscore = number.indexOf("_");
+		String wholeNumber;
+		if (underscore == -1){
+			return 0;
+		}else{
+
+			wholeNumber = number.substring(0, underscore);
+
+			int newWholeNumber = Integer.parseInt(wholeNumber);
+
+
+			return newWholeNumber;
+
+
+		}
+	}
+	public static int getNumerator(String number ){
+		int underscore = number.indexOf("_");
+		
+		// This code has a bug, it will throw an exception if there is no slash.  You need to check if 
+		// the slash exists, and if it doesn't, you you have a whole number and can simply return the number
+		// parameter that was passed
+		int slash = number.indexOf("/");
+		
+		if ( slash != -1 ){
+			String numerator = number.substring(underscore + 1, slash);
+
+			int newNumerator = Integer.parseInt(numerator);
+		}else{
+			String numerator = number.substring(0,slash);
+			int newNumerator = Integer.parseInt(numerator);
+			return newNumerator;
+		}
+			
+	
+	return Integer.parseInt(number);
+		
+	}	
+
+	
+
+	public static int getDenominator(String number){
+		int slash = number.indexOf("/");
+		String denominator = number.substring(slash +1);
+
+		int newDenominator = Integer.parseInt(denominator);
+
+		return newDenominator;
+
+
+	}
+	public static int getImproperNumerator(int newWholeNumber, int newNumerator, int newDenominator){
+		int getImproperNumerator = (newWholeNumber * newDenominator + newNumerator);
+
+		return getImproperNumerator;
+	}
+
+	public static void  multiply ( int improperNumerator1, int improperNumerator2, int denominator1,
+			int denominator2){
+		int newNumerator = improperNumerator1 *  improperNumerator2;
+		int newDenominator = denominator1 * denominator2; 
+		System.out.println("Multiplication answer is " + newNumerator + " / " + newDenominator); 
+		makeProperFraction( newNumerator, newDenominator);
+
+
+	}
+
+	public static void  divide ( int improperNumerator1, int improperNumerator2, int denominator1, int denominator2){
+		int newNumerator = improperNumerator1 *  denominator2;
+		int newDenominator = improperNumerator2 * denominator1; 
+		System.out.println("Division answer is " + newNumerator + " / " + newDenominator); 
+		makeProperFraction(newNumerator ,  newDenominator);
+
+
+	}
+
+
+	public static int getLeastCommonMultiple(int denominator1, int denominator2){
+
+		int originalDenominator1 = denominator1;
+		int originalDenominator2 = denominator2;
+
+		while (denominator1 != denominator2){
+			if (denominator1 < denominator2){
+				denominator1 += originalDenominator1;
+
+			}else{ 
+				denominator2 += originalDenominator2;
+
+			}
+
+
+
+		}
+
+		return denominator1;
+
+	}
+
+	public static void add ( int lcm, int denominator1, int denominator2, int improperNumerator1, int improperNumerator2,
+			String fraction1, String fraction2){
+
+		int newNumerator1 = (lcm / denominator1) * improperNumerator1; 
+		int newNumerator2 = (lcm / denominator2) * improperNumerator2; 
+		int newNumerator = (newNumerator1 + newNumerator2);
+		int newDenominator = lcm;
+		System.out.println("The addition of " + fraction1 + " and " + fraction2 + " is " + newNumerator + "/" + newDenominator);
+		makeProperFraction( newNumerator ,  newDenominator);
+	}
+
+	public static void subtract (int lcm, int denominator1, int denominator2, int improperNumerator1,
+			int improperNumerator2, String fraction1, String fraction2){
+
+		int newNumerator1 = (lcm / denominator1) * improperNumerator1; 
+		int newNumerator2 = (lcm / denominator2) * improperNumerator2; 
+		int newNumerator = (newNumerator1 - newNumerator2);
+		int newDenominator = lcm;
+		System.out.println("The subtraction of " + fraction1 + " and " + fraction2 + " is " + newNumerator + "/" + newDenominator);
+		makeProperFraction( newNumerator , newDenominator);
+	}
+
+
+	public static void makeProperFraction(int newNumerator , int newDenominator){
+		int wholeNumber = (newNumerator / newDenominator);
+		int numeratorProperFraction = (newNumerator % newDenominator);
+		int denominatorProperFraction = newDenominator;
+		denominatorProperFraction = Math.abs(denominatorProperFraction);
+
+		
+			
+		if  (numeratorProperFraction == 0){
+
+			System.out.println("The answer is " + wholeNumber);
+		
+			
+		}else{
+			
+		    if (newNumerator < newDenominator){
+		    	//write another if for when I can simplify
+			
+		    }else{
+		    	System.out.println ("The answer is " + wholeNumber + "_" + numeratorProperFraction + "/" + denominatorProperFraction);	
+		    }
+		}
+	
+
+
+	
+	
+
+
+
+
+
+
+		/* int gdc =1;
+		for i = 1, 2, 3    min (numerator, denominator)
+		if numerator % i = 0 && denominator % i ==0
+		gdc = i; 
+		*/
+		
+		
+	}
+	
+	
+	
+}
+		
+
+
+
+	
+	
+
+
+
+
